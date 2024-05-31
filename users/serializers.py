@@ -11,25 +11,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model=models.User
         fields = [
-            'first_name',
-            'last_name',
+            'full_name',
             'email',
             'password',
-            'password_repeat',
-            'phone',
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
-    def validate(self, data):
-        if data['password'] != data.get('password_repeat'):
-            raise serializers.ValidationError("Пароли не совпадают")
-        return data
+
     def create(self, validated_data):
         user = models.User.objects.create(
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            phone = validated_data['phone']
+            full_name=validated_data['full_name'],
+
         )
         user.set_password(validated_data['password'])
 
